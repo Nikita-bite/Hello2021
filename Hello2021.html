@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="margin: 0px">
+<canvas id="canvas"></canvas>
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    // let date = new Date();
+    let bg = new Image();
+    let cremlinchimes = new Image();
+    let y = [innerHeight / 20, -innerHeight / 3, -2 * innerHeight / 3, -innerHeight + innerHeight / 20]
+    let snow = [1, 2, 3, 4];
+    for (let i = 0; i < snow.length; i++) {
+        snow[i] = new Image();
+        snow[i].src = "snow.png"
+        console.log(snow[i], i, snow.length);
+    }
+    let chimes = new Audio();
+    bg.src = "bg2021.jpeg";
+    cremlinchimes.src = "cremlinchimes.jpeg"
+    chimes.src = "chimes.mp3";
+    chimes.autoplay = true;
+    chimes.preload = 'auto';
+    chimes.allow = 'autoplay'
+    chimes.muted = false;
+    //chimes.play();
+    let t = 0;
+    let step = 0;
+    let idate = 0;
+    let min = 20;
+    let year = 2021
+
+    function draw() {
+        let date = new Date();
+        console.log(date.getFullYear());
+        t++;
+        if (t % 600 == 0) {
+            if (step == 3) {
+                step = 0;
+            }
+            y[step] = -innerHeight + innerHeight / 20;
+            step++;
+        }
+// if(date.getFullYear() == 2021 && 60 + date.getSeconds() <= 66){
+         if (date.getMinutes() == min && date.getFullYear() == 2021 || date.getMinutes() == min + 1 && date.getSeconds() <= 6) {
+        //if (date.getMinutes() == min || date.getMinutes() == min + 1 && date.getSeconds() <= 6) {
+            if (idate == 0) {
+                chimes.play();
+                idate++;
+            }
+            ctx.drawImage(cremlinchimes, 0, 0, innerWidth, innerHeight);
+            snowDown();
+        } else {
+            ctx.drawImage(bg, 0, 0, innerWidth, innerHeight);
+            snowDown();
+        }
+        window.requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    function snowDown() {
+        for (let i = 0; i < snow.length; i++) {
+            ctx.drawImage(snow[i], 0, y[i], innerWidth, innerHeight);
+            y[i] += innerHeight / 1000;
+        }
+    }
+</script>
+
+
+</body>
+</html>
